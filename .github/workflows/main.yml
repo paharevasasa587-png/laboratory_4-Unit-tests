@@ -1,0 +1,36 @@
+name: Run Triangle Unit Tests
+
+on: 
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.9', '3.10', '3.11']  # можно оставить одну версию
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Display Python version
+      run: python --version
+
+    - name: Install pytest
+      run: pip install pytest
+
+    - name: List files (for debugging)
+      run: ls -la
+
+    - name: Run triangle unit tests
+      run: python -m pytest test_triangle.py -v
