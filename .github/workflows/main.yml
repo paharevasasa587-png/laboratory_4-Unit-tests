@@ -1,10 +1,6 @@
-name: Run Triangle Unit Tests
+name: Run Unit Tests triangle
 
-on: 
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push]
 
 jobs:
   test:
@@ -12,25 +8,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: ['3.9', '3.10', '3.11']  # можно оставить одну версию
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python ${{ matrix.python-version }}
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Display Python version
-      run: python --version
-
-    - name: Install pytest
+        python-version: '3.10'
+        
+    - name: Install dependencies
       run: pip install pytest
-
-    - name: List files (for debugging)
-      run: ls -la
-
-    - name: Run triangle unit tests
-      run: python -m pytest test_triangle.py -v
+      
+    - name: Run tests
+      run: pytest test_triangle.py -v
